@@ -82,6 +82,15 @@ export default class EditTransform extends TsxComponent<{}> {
     };
   }
 
+  setRotation() {
+    console.log(this.transform.rotation);
+    return async (value: string) => {
+      if (await this.$refs.validForm.validateAndGetErrorsCount()) return;
+      const rotdeg = Number(value) - Number(this.transform.rotation);
+      this.rotate(rotdeg)();
+    };
+  }
+
   rotate(deg: number) {
     return () =>
       this.editorCommandsService.executeCommand('RotateItemsCommand', this.selection, deg);
@@ -109,6 +118,21 @@ export default class EditTransform extends TsxComponent<{}> {
             <span style="margin-left: 8px;">{dirMap(dir)}</span>
           </div>
         ))}
+      </HFormGroup>
+    ) : null;
+  }
+
+  get rotateForm() {
+    return this.selection.isSceneItem() ? (
+      <HFormGroup metadata={{ title: $t('Rotate') }}>
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+          <NumberInput
+            value={this.transform.rotation}
+            metadata={{ isInteger: true, min: 0, max: 360 }}
+            onInput={this.setRotation()}
+          />
+          <span style="margin-left: 8px;">Rotate</span>
+        </div>
       </HFormGroup>
     ) : null;
   }
@@ -150,6 +174,7 @@ export default class EditTransform extends TsxComponent<{}> {
               {$t('Rotate 90 Degrees CCW')}
             </div>
           </HFormGroup>
+          {this.rotateForm}
           {this.cropForm}
         </ValidatedForm>
 
