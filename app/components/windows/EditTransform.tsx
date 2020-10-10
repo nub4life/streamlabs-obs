@@ -123,7 +123,7 @@ export default class EditTransform extends TsxComponent<{}> {
   }
 
   get rotateForm() {
-    return (
+    return this.selection.isSceneItem() ? (
       <HFormGroup metadata={{ title: $t('Rotate') }}>
         <div style="display: flex; align-items: center; margin-bottom: 8px;">
           <NumberInput
@@ -134,7 +134,7 @@ export default class EditTransform extends TsxComponent<{}> {
           <span style="margin-left: 8px;">Rotate</span>
         </div>
       </HFormGroup>
-    );
+    ) : null;
   }
 
   coordinateForm(type: string) {
